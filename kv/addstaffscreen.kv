@@ -1,0 +1,233 @@
+#:import utils kivy.utils
+
+<AddStaffScreen>:
+
+    FloatLayout:
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#85C1E9")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+
+        #SIDE NAV BAR
+        GridLayout:
+            cols:2
+
+            FloatLayout:
+                pos_hint: {"top": 1, "left": 1}
+                size_hint: .2, 1
+                canvas:
+                    Color:
+                        rgb:utils.get_color_from_hex("#85C1E9")
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                Image:
+                    # Streak label
+                    pos_hint: {'center_y': 0.92, 'center_x': 0.5}
+                    width:0.8
+                    source:"./QueueBusterLogo.png"
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.75, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Home"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+
+                        on_release:
+                            app.change_screen("home_screen", direction='right', mode='push')
+
+
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.6, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Settings"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+                        on_release:
+                            app.change_screen("settings_screen", direction='right', mode='push')
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.45, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Advertising"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+                        on_release:
+                            app.change_screen("advertising_screen", direction='right', mode='push')
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.3, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Manage Staff"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+                        on_release:
+                            app.change_screen("add_staff_screen", direction='right', mode='push')
+
+                    # END OF NAV BAR
+
+
+            GridLayout
+                pos_hint: {"top": 1, "left": .8}
+                size_hint: .8, 1
+                rows:2
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.8, 'center_x': 0.6}
+                    size_hint: 1, .15
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#08274b")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+
+                    Label:
+                        # Title label
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.4}
+                        size_hint: .6, 1
+                        text_size: self.size
+                        halign: 'left'
+                        valign: 'middle'
+                        markup: 'true'
+                        text: "[b]Welcome to Queue Buster[/b]"
+
+
+                    Button:
+                        text:"Logout"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.9}
+                        size_hint: .15, .9
+                        background_normal: './buttonlight.png'
+                        background_down: './buttonlight.png'
+                        border: 1, 1, 1, 1
+                        on_release:
+                            app.change_screen("add_staff_screen", direction='right', mode='push')
+
+
+                FloatLayout:
+                    pos_hint: {'center_y': .425, 'center_x': 0.5}
+                    size_hint: 1, .85
+
+                    Label:
+                        pos_hint: {'center_y': 0.8, 'center_x': 0.5}
+                        size_hint: 1, .2
+                        text: "Queue Buster Add Staff"
+
+                    GridLayout:
+                        cols:2
+                        padding:2,2,6,2
+                        pos_hint: {'center_y': 0.7, 'center_x': 0.5}
+                        size_hint: 0.6, 0.1
+                        Label:
+                            text:"First Name"
+                        TextInput:
+                            id:first_name
+
+                    GridLayout:
+                        cols:2
+                        padding:2,2,6,2
+                        pos_hint: {'center_y': 0.6, 'center_x': 0.5}
+                        size_hint: 0.6, 0.1
+                        Label:
+                            text:"Last Name"
+                        TextInput:
+                            id:last_name
+
+                    GridLayout:
+                        cols:2
+                        padding:2,2,6,2
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 0.6, 0.1
+                        Label:
+                            text:"UserName"
+                        TextInput:
+                            id:user_name
+
+                    GridLayout:
+                        cols:2
+                        padding:2,2,6,2
+                        pos_hint: {'center_y': 0.4, 'center_x': 0.5}
+                        size_hint: 0.6, 0.1
+                        Label:
+                            text:"Password"
+                        TextInput:
+                            id:password
+
+
+                    Spinner:
+                        id: role
+                        text:"Select Role"
+                        background_color:(0.093,0.448,0.853,1)
+                        values: ('Select',)
+                        pos_hint: {'center_y': 0.3, 'center_x': 0.5}
+                        size_hint: .6, 0.1
+
+
+                    Button:
+                        pos_hint: {'center_y': 0.2, 'center_x': 0.5}
+                        size_hint: 0.6, 0.1
+                        background_color:(0.093,0.448,0.853,1)
+                        text: "Submit"
+                        on_release:
+                            root.addStaff()
+
+                    Label:
+                        # Error Message
+                        pos_hint: {'center_y': 0.1, 'center_x': 0.5}
+                        size_hint: .7, .1
+                        text: ""
+                        id: error_msg
+
+
+

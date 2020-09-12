@@ -1,0 +1,123 @@
+#:import utils kivy.utils
+
+<SettingsScreen>:
+    FloatLayout:
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#85C1E9")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        GridLayout:
+            cols:1
+            padding:100,70,70,100
+
+            GridLayout:
+                pos_hint: {"top": .8, "left": .7}
+                size_hint: .8, .8
+                rows:13
+
+                Label:
+                    pos_hint: {"top": 0.8, "left": 0.5}
+                    size_hint: 1, .2
+                    text: "Queue Buster Camera Settings"
+
+                Label:
+                    text:"Entrance Cameras"
+
+                GridLayout:
+                    cols:2
+                    Label:
+                        id:video_path
+                        text:"The current Entrance Video input is " + root.ids.video_path.source
+                        source:"None"
+                    Button:
+                        background_color:(0.093,0.448,0.853,1)
+                        text:"X"
+
+                Button:
+                    text: "Select New Entrance Video File"
+                    background_color:(0.093,0.448,0.853,1)
+                    on_release:
+                        root.open_popup()
+
+                Label:
+                    text:"Exit Cameras"
+
+                GridLayout:
+                    cols:2
+                    Label:
+                        id:video_path_exit
+                        text:"The current Entrance Video input is " + root.ids.video_path_exit.source
+                        source:"None"
+                    Button:
+                        background_color:(0.093,0.448,0.853,1)
+                        text:"X"
+
+                Button:
+                    text: "Select New Exit Video File"
+                    background_color:(0.093,0.448,0.853,1)
+                    on_release:
+                        root.open_popup()
+
+
+                Label:
+                    id:confidence
+                    text:"Confidence % for Facial Detection is UNSET"
+
+                GridLayout:
+                    cols:2
+                    TextInput:
+                        id:confidence_val
+                    Button:
+                        text:"Update"
+                        background_color:(0.093,0.448,0.853,1)
+                        on_release:
+                            root.update_conf(root.ids.confidence_val.text)
+
+
+                Label:
+                    id:q_length
+                    text:"The maximum queue length is "
+
+                GridLayout:
+                    cols:2
+                    TextInput:
+                        id:tol_length
+                    Button:
+                        text:"Update"
+                        background_color:(0.093,0.448,0.853,1)
+                        on_release:
+                            root.update_length(root.ids.tol_length.text)
+
+
+                Label:
+                    id:wait_time
+                    text:"The maximum wait time is "
+                GridLayout:
+                    cols:2
+                    TextInput:
+                        id:tol_wait
+                    Button:
+                        text:"Update"
+                        background_color:(0.093,0.448,0.853,1)
+                        on_release:
+                            root.update_wait(root.ids.tol_wait.text)
+
+
+
+
+<MyWidget>:
+    GridLayout
+        cols:2
+        id:my_widget
+
+        #FileChooserListView:
+        FileChooserIconView:
+            id:filechooser
+            background_color:(0.093,0.448,0.853,1)
+            on_selection:
+                app.fileSelector.selected(filechooser.selection)
+
+

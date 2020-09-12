@@ -1,0 +1,273 @@
+#:import utils kivy.clock
+<HomeScreen>:
+
+    #HomeScreen0- Higher Level Admin
+
+    FloatLayout:
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#85C1E9")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+
+        #SIDE NAV BAR
+        GridLayout:
+            cols:2
+            FloatLayout:
+                pos_hint: {"top": 1, "left": 1}
+                size_hint: .2, 1
+                canvas:
+                    Color:
+                        rgb:utils.get_color_from_hex("#85C1E9")
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                Image:
+                    # Streak label
+                    pos_hint: {'center_y': 0.92, 'center_x': 0.5}
+                    width:0.8
+                    source:"./QueueBusterLogo.png"
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.75, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Home"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+
+                        on_release:
+                            app.change_screen("home_screen", direction='right', mode='push')
+
+
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.6, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Settings"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+                        on_release:
+                            app.change_screen("settings_screen", direction='right', mode='push')
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.45, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Advertising"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+                        on_release:
+                            app.change_screen("advertising_screen", direction='right', mode='push')
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.3, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Manage Staff"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+                        on_release:
+                            app.change_screen("add_staff_screen", direction='right', mode='push')
+
+                    # END OF NAV BAR
+
+
+            GridLayout
+                pos_hint: {"top": 1, "left": .8}
+                size_hint: .8, 1
+                rows:2
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.8, 'center_x': 0.6}
+                    size_hint: 1, .15
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#08274b")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+
+                    Label:
+                        # Title label
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.4}
+                        size_hint: .6, 1
+                        text_size: self.size
+                        halign: 'left'
+                        valign: 'middle'
+                        markup: 'true'
+                        text: "[b]Welcome to Queue Buster[/b]"
+
+
+                    Button:
+                        text:"Logout"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.9}
+                        size_hint: .15, .9
+                        background_normal: './buttonlight.png'
+                        background_down: './buttonlight.png'
+                        border: 1, 1, 1, 1
+                        on_release:
+                            app.change_screen("add_staff_screen", direction='right', mode='push')
+
+                FloatLayout:
+                    pos_hint: {'center_y': .425, 'center_x': 0.6}
+                    size_hint: 1, .85
+
+                    GridLayout:
+                        rows:3
+                        pos_hint: {'center_y': .8, 'center_x': 0.6}
+                        size_hint: 1, .4
+
+                        Label:
+                            # Average Wait Time Label
+                            pos_hint: {'center_y': .9, 'center_x': 0.4}
+                            size_hint: .7, .2
+                            text_size: self.size
+                            halign: 'left'
+                            color:(0,0,0,1)
+                            background_color:(0.093,0.448,0.853,1)
+                            text: "We are calculating the average wait time ...        "
+                            id: avg_wait
+
+                        Label:
+                            # Number of People in Store
+                            #pos_hint: {'center_y': .75,'center_x': 0.4}
+                            size_hint: .7, .2
+                            text_size: self.size
+                            halign: 'left'
+                            color:(0,0,0,1)
+                            background_color:(0.093,0.448,0.853,1)
+                            text: "We are calculating the number of people in the store ..."
+                            id: q_len
+
+                        Label:
+                            # Number of People in Queue
+                            pos_hint: {'center_y': .6,'center_x': 0.4}
+                            size_hint: .7, .2
+                            text_size: self.size
+                            halign: 'left'
+                            color:(0,0,0,1)
+                            background_color:(0.093,0.448,0.853,1)
+                            text: "We are calculating the number of people in the queue ..."
+                            id: q_len
+
+
+                    Button:
+                        text:"Play Entrance Video"
+                        pos_hint: {'center_y': .4, 'center_x': 0.25}
+                        size_hint: .3, .2
+                        background_color:(0.093,0.448,0.853,1)
+                        on_release:
+                            root.open_popup_entrance()
+
+                    Button:
+                        text:"Play Exit Video"
+                        pos_hint: {'center_y': .4, 'center_x': 0.65}
+                        size_hint: .3, .2
+                        background_color:(0.093,0.448,0.853,1)
+                        on_release:
+                            root.open_popup_exit()
+
+                    Button:
+                        text:"Start Video Analysis"
+                        pos_hint: {'center_y': .15, 'center_x': 0.25}
+                        size_hint: .3, .2
+                        background_color:(0.093,0.448,0.853,1)
+                        on_release:
+                            app.start_second_thread(app.selectedStore.entrance_videos, app.selectedStore.exit_videos, app.selectedStore.queue_video)
+
+                    Button:
+                        text:"Stop Video Analysis"
+                        pos_hint: {'center_y': .15, 'center_x': 0.65}
+                        size_hint: .3, .2
+                        background_color:(0.093,0.448,0.853,1)
+                        on_release:
+                            root.open_popup_exit()
+
+
+
+<MyVideoPopup>
+
+    GridLayout:
+        rows:2
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#85C1E9")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        GridLayout:
+            cols:3
+            VideoPlayer:
+                id:video_player_1
+                source:
+                state:"play"
+                options: {'eos': 'stop'}
+
+            VideoPlayer:
+                id:video_player_2
+                source:
+                state:"play"
+                options: {'eos': 'stop'}
+
+            VideoPlayer:
+                id:video_player_3
+                source:
+                state:"play"
+                options: {'eos': 'stop'}
+        Button:
+            text:"CLOSE"
+            pos_hint: {'center_y': 0.2, 'center_x': 0.5}
+            size_hint: 0.4, .1
+            background_color:(0.093,0.448,0.853,1)
+            on_release:
+                root.ids.video_player_1.state='stop'
+                root.ids.video_player_2.state='stop'
+                root.ids.video_player_3.state='stop'
+                root.dismiss()
+

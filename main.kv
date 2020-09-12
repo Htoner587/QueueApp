@@ -1,0 +1,42 @@
+#:include kv\homescreen.kv
+#:include kv\homescreen2.kv
+#:include kv\adminhome.kv
+#:include kv\alerts.kv
+#:include kv\settingsscreen.kv
+#:include kv\advertisingscreen.kv
+#:include kv\loginscreen.kv
+#:include kv\selectstorescreen.kv
+#:include kv\addstorescreen.kv
+#:include kv\addstaffscreen.kv
+
+GridLayout:
+    cols:1
+    ScreenManager:
+        id: screen_manager
+        LoginScreen:
+            name: "login_screen"
+            id: login_screen
+        AdminHome:
+            name: "admin_home"
+            id: admin_home
+        HomeScreen:
+            name: "home_screen"
+            id: home_screen
+        HomeScreen2:
+            name: "home_screen2"
+            id: home_screen2
+        SelectStore:
+            name: "select_store_screen"
+            id: select_store_screen
+        AddStoreScreen:
+            name: "add_store_screen"
+            id: add_store_screen
+        AddStaffScreen:
+            name: "add_staff_screen"
+            id: add_staff_screen
+        SettingsScreen:
+            name: "settings_screen"
+            id: settings_screen
+        AdvertisingScreen:
+            name: "advertising_screen"
+            id: advertising_screen

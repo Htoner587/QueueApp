@@ -1,0 +1,55 @@
+#:import utils kivy.utils
+
+<LengthAlertPopup>:
+    size_hint: (None, None)
+    size: (450,250)
+    FloatLayout:
+        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#FF0000")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        GridLayout:
+            rows:2
+            pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+            Label:
+                text:"THE QUEUE LENGTH HAS EXCEEDED THE MAXIMUM!"
+
+            Button:
+                text:"Dismiss"
+                background_color:(0,1,1,0.3)
+                on_release:
+                    app.tol_length_popup.dismiss()
+
+
+
+<WaitAlertPopup>:
+    size_hint: (None, None)
+    size: (450,250)
+    FloatLayout:
+        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#FF0000")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        GridLayout:
+            pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+            rows:2
+
+
+            Label:
+                text:"THE QUEUE LENGTH HAS EXCEEDED THE MAXIMUM!"
+
+            Button:
+                text:"Dismiss"
+                background_color:(0,1,1,0.3)
+                on_release:
+                    app.tol_wait_popup.dismiss()
+
+

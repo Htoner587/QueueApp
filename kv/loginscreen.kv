@@ -1,0 +1,71 @@
+#:import utils kivy.utils
+
+<LoginScreen>:
+    FloatLayout:
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#85C1E9")
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        GridLayout:
+            cols:1
+            pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+            padding:80,70,70,80
+
+            GridLayout:
+                rows:4
+                pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                size_hint: .8, .8
+
+
+                Image:
+                    # Streak label
+                    pos_hint: {'center_y': 0.8, 'center_x': 0.5}
+                    size_hint: 1, .4
+                    source:"./QueueBusterLogo.png"
+
+
+                GridLayout:
+                    cols:2
+                    padding:10,10,100,10
+                    pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                    size_hint: 0.4, 0.15
+                    Label:
+                        text:"UserName"
+                    TextInput:
+                        id:login
+
+                GridLayout:
+                    cols:2
+                    padding:10,10,100,10
+                    pos_hint: {'center_y': 0.3, 'center_x': 0.5}
+                    size_hint: 0.4, 0.15
+                    Label:
+                        text:"Password"
+                    TextInput:
+                        id:passw
+
+                FloatLayout:
+                    size_hint: .4, .4
+                    pos_hint: {'center_y': 0.4, 'center_x': 0.5}
+
+
+                    Button:
+                        size_hint: .6, .5
+                        pos_hint: {'center_y': 0.4, 'center_x': 0.5}
+                        text: "Go"
+                        background_color:(0.093,0.448,0.853,1)
+                        on_release:
+                            root.signIn()
+
+                    Label:
+                        # Login Message
+                        pos_hint: {'center_y': 0.1, 'center_x': 0.5}
+                        size_hint: .6, .5
+                        text: ""
+                        id: login_msg
+
+
+
