@@ -18,6 +18,7 @@ from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 import ffpyplayer
 import datetime
+import enum
 
 """
 
@@ -45,7 +46,6 @@ class LoginScreen(Screen):
 
         if len(rows) == 1:
             app.setUser(rows[0][0], rows[0][1])
-            print("The user is " + str(rows[0][1]) + " their user type is " + str(rows[0][0]))
             if rows[0][0] == 0:
                 app.change_screen("admin_home", direction='right', mode='push')
 
@@ -96,39 +96,11 @@ class HomeScreen(Screen):
     pass
 
 
-class HomeScreen2(HomeScreen):
-    """
-    videoPopup = None
-
-    def open_popup_entrance(self):
-        app.videoPopup = MyVideoPopup()
-        app.videoPopup.title = "Entrance Video"
-
-        app.videoPopup.ids.video_player_1.source = app.entrance_videos[0]
-        if len(app.entrance_videos) > 1:
-            app.videoPopup.ids.video_player_2.source = app.entrance_videos[1]
-            if len(app.entrance_videos) > 2:
-                app.videoPopup.ids.video_player_3.source = app.entrance_videos[3]
-
-        app.videoPopup.open()
-
-    def open_popup_exit(self):
-        app.videoPopup = MyVideoPopup()
-        app.videoPopup.title = "Entrance Video"
-
-        app.videoPopup.ids.video_player_1.source = app.exit_videos[0]
-        if len(app.entrance_videos) > 1:
-            app.videoPopup.ids.video_player_2.source = app.exit_videos[1]
-            if len(app.entrance_videos) > 2:
-                app.videoPopup.ids.video_player_3.source = app.exit_videos[3]
-
-        app.videoPopup.open()
-
-    """
+class HomeScreenViewer(HomeScreen):
     pass
 
 
-class AdminHome(Screen):
+class AdminHome(HomeScreen):
 
     def getChains(self):
         chains = []
@@ -374,6 +346,16 @@ class Store():
     queue_video = None
 
 
+class User():
+    userNumber=0
+    userType=None
+
+class UserType(enum.Enum):
+    HigherLevelAdmin = 0
+    StaffAdmin = 1
+    ViewerStaff = 2
+
+
 """
 APP - MAIN FUNCTIONALITY
 """
@@ -382,11 +364,10 @@ GUI = Builder.load_file("main.kv")
 
 
 class QueueBusterApp(App):
-    my_queue_analysis = None
-    my_wait_time_calculator = None
+    my_queue_analysis = queueAnalysis()
+    my_wait_time_calculator = waitTimeCalculator()
     selectedStore = Store()
-    user = None
-    userType = None
+    user=User()
     tol_length_popup = LengthAlertPopup()
     tol_wait_popup = WaitAlertPopup()
 
@@ -401,7 +382,6 @@ class QueueBusterApp(App):
         Clock.schedule_interval(self.calculate_wait_time, 60)
 
     def start_second_thread(self, video_entrance, video_exit, video_queue):
-        self.my_queue_analysis = queueAnalysis()
         self.my_queue_analysis.store = app.selectedStore.selectedStore
         self.root.ids.settings_screen.ids.confidence.text = "Confidence % for Facial Detection is " + str(
             self.my_queue_analysis.confidence_val)
@@ -409,9 +389,9 @@ class QueueBusterApp(App):
                               args=(video_entrance, video_exit, video_queue))
         t2.start()
 
-    def setUser(self, userType, user):
-        self.user = user
-        self.userType = userType
+    def setUser(self, userType, userNumber):
+        self.user.userNumber = userNumber
+        self.user.userType = userType
 
     def setStore(self, store):
 
@@ -484,7 +464,6 @@ class QueueBusterApp(App):
 
     def calculate_wait_time(self, *args):
         if app.selectedStore != None:
-            app.my_wait_time_calculator = waitTimeCalculator()
             waitTimeCalculator.store = app.selectedStore
             waitTimeCalculator.numInStore = app.tol_length
 
@@ -585,10 +564,10 @@ class QueueBusterApp(App):
 
 
 """
-
 MAIN
-
 """
+
+
 
 if __name__ == '__main__':
     app = QueueBusterApp()

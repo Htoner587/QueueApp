@@ -13,7 +13,7 @@ class MyTestCase_App(unittest.TestCase):
 
         self.app.setUser(1,2)
 
-        self.assertEqual(self.app.user, 2)
+        self.assertEqual(self.app.userNumber, 2)
 
         self.assertEqual(self.app.userType, 1)
 
