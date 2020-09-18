@@ -231,21 +231,24 @@ class AdvertisingScreen(Screen):
 
     advert_image = age_src[2]
 
-    def calculate_age(self, *args):
-
-        if app.selectedStore != None:
-            print("Calculating the ages from database")
-
-            connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
+    database=pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
                                          database="queue_buster", port=3306)
 
-            cursor = connection.cursor()
+    #store = app.selectedStore.selectedStore
 
-            retrive = "Select MedianValue, GenderID FROM (q_Customers JOIN q_age ON q_customers.AgeID=q_age.AgeID) WHERE WaitTime IS NULL AND StoreID=%s;"
+    store=0
+    def calculate_age(self, *args):
 
-            store = (app.selectedStore)
+        if self.store != None:
+            print("Calculating the ages from database")
 
-            cursor.execute(retrive, store)
+            cursor = self.database.cursor()
+
+            retrive = "Select MedianValue, GenderID FROM (q_Customers JOIN q_age ON q_customers.AgeID=q_age.AgeID) WHERE StoreID=%s LIMIT 20;"
+
+
+
+            cursor.execute(retrive, self.store)
 
             rows = cursor.fetchall()
 
@@ -256,33 +259,33 @@ class AdvertisingScreen(Screen):
                 totalAge += row[0]
                 totalGender += row[1]
 
-            cursor.close()
+            print(totalAge)
 
             if len(rows) > 0:
-                avg_age = totalAge / len(rows)
+                self.avg_age = totalAge / len(rows)
 
-                avg_gender = totalGender / len(rows)
+                self.avg_gender = totalGender / len(rows)
 
-                app.root.ids.advertising_screen.ids.avg_age.text = "The average age in the queue is " + str(
-                    round(avg_age, 2))
-                app.root.ids.advertising_screen.ids.avg_gen.text = "The average gender in the queue is " + str(
-                    round(avg_gender, 2))
+                #app.root.ids.advertising_screen.ids.avg_age.text = "The average age in the queue is " + str(
+                    #round(avg_age, 2))
+                #app.root.ids.advertising_screen.ids.avg_gen.text = "The average gender in the queue is " + str(
+                    #round(avg_gender, 2))
 
-                if avg_age < 10:
+                if self.avg_age < 10:
                     self.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[0])
 
-                if avg_age >= 10:
-                    if avg_age < 18:
-                        if avg_gender < 0.5:
-                            app.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[1])
+                if self.avg_age >= 10:
+                    if self.avg_age < 18:
+                        if self.avg_gender < 0.5:
+                            self.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[1])
                         else:
-                            app.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[2])
+                            self.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[2])
 
-                if avg_age >= 18:
-                    if avg_age <= 50:
-                        app.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[3])
-                    else:
-                        app.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[4])
+                #if avg_age >= 18:
+                    #if avg_age <= 50:
+                        #app.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[3])
+                    #else:
+                        #app.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[4])
 
     pass
 
@@ -339,7 +342,7 @@ STORE
 
 class Store():
     selectedStore=None
-    tol_length = 15
+    tol_length = 3
     tol_wait = datetime.timedelta(minutes=30)
     entrance_videos = []
     exit_videos = []
@@ -423,25 +426,26 @@ class QueueBusterApp(App):
         cursor.close()
 
     def selectStore(self, store):
-        # retrive store number from string store name and then setStore
+        """
+        Retrieve store number from string store name and then setStore
+        """
 
         connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
                                      database="queue_buster", port=3306)
-
         cursor = connection.cursor()
-        retrive = "Select StoreID FROM q_Stores WHERE StoreName=%s ;"
+        retrieve = "Select StoreID FROM q_Stores WHERE StoreName=%s ;"
 
-        cursor.execute(retrive, store)
+        cursor.execute(retrieve, store)
         rows = cursor.fetchall()
-        # self.selectedStore= Store(rows[0][0])
         self.setStore(rows[0][0])
         cursor.close()
+
 
     # METHODS
 
     def update_ages(self, *args):
 
-        if app.selectedStore != None:
+        if app.selectedStore.selectedStore != None:
             print("Adding ages to database")
 
             connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
@@ -451,7 +455,7 @@ class QueueBusterApp(App):
 
             retrive = "Select CustomerID FROM q_Customers WHERE AgeID IS NULL AND StoreID=%s;"
 
-            store = (app.selectedStore)
+            store = (app.selectedStore.selectedStore)
 
             cursor.execute(retrive, store)
 
@@ -464,15 +468,15 @@ class QueueBusterApp(App):
 
     def calculate_wait_time(self, *args):
         if app.selectedStore != None:
-            waitTimeCalculator.store = app.selectedStore
-            waitTimeCalculator.numInStore = app.tol_length
+            waitTimeCalculator.store = app.selectedStore.selectedStore
+            waitTimeCalculator.numInStore = app.selectedStore.tol_length
 
             waitTime = app.my_wait_time_calculator.calculate_wait_time()
             outputString = "The average wait time is " + str(waitTime)
             self.root.ids.home_screen.ids.avg_wait.text = str(outputString)
             self.root.ids.home_screen2.ids.avg_wait.text = str(outputString)
 
-            if waitTime > app.tol_wait:
+            if waitTime > app.selectedStore.tol_wait:
                 app.tol_wait_popup.open()
                 app.tol_wait_popup.title = "WARNING"
 
@@ -485,7 +489,7 @@ class QueueBusterApp(App):
             cursor = connection.cursor()
             retrive = "Select WaitTime FROM q_Customers WHERE WaitTime IS NULL AND StoreID=%s ORDER BY CustomerID DESC;"
 
-            store = (app.selectedStore)
+            store = (app.selectedStore.selectedStore)
 
             print("Calculating queue length ... ")
             # executing the quires
@@ -496,7 +500,7 @@ class QueueBusterApp(App):
             self.root.ids.home_screen.ids.q_len.text = str(outputString)
             self.root.ids.home_screen.ids.q_len.text = str(outputString)
 
-            if queueLength > app.tol_length:
+            if queueLength > app.selectedStore.tol_length:
                 app.tol_length_popup.open()
                 app.tol_length_popup.title = "WARNING"
             cursor.close()

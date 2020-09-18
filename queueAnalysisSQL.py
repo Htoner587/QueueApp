@@ -138,7 +138,6 @@ class queueAnalysis():
 
 
         count = 0
-
         while fvs.more():
             frame = fvs.read()
             count += 1
