@@ -6,7 +6,7 @@ from datetime import timedelta
 class waitTimeCalculator():
 
     store=None
-    numInStore=None
+    maxInStore=None
 
     database= pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
                                          database="queue_buster", port=3306)
@@ -40,7 +40,7 @@ class waitTimeCalculator():
             CALCULATION
             """
 
-            if(inStore<self.numInStore):
+            if(inStore<self.maxInStore):
                 waitTime=datetime.timedelta(minutes=0)
 
 
@@ -52,12 +52,12 @@ class waitTimeCalculator():
                 print("There are "+str(inStore)+"people in store")
 
 
-            if(inStore==self.numInStore):
+            if(inStore==self.maxInStore):
                 waitTime=datetime.timedelta(minutes=5)
                 print("Store full")
 
 
-            if(inStore>self.numInStore):
+            if(inStore>self.maxInStore):
 
                 """
                 GET THE RATE OF EXIT

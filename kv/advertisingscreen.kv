@@ -151,7 +151,7 @@
                         background_down: './buttonlight.png'
                         border: 1, 1, 1, 1
                         on_release:
-                            app.change_screen("add_staff_screen", direction='right', mode='push')
+                            app.signOut()
 
                 FloatLayout:
                     pos_hint: {'center_y': .425, 'center_x': 0.6}
@@ -160,12 +160,12 @@
                     GridLayout:
                         rows:3
                         pos_hint: {'center_y': .8, 'center_x': 0.6}
-                        size_hint: 1, .4
+                        size_hint: 1, .3
 
                         Label:
                             # Average Wait Time Label
                             pos_hint: {'center_y': .9, 'center_x': 0.4}
-                            size_hint: .7, .2
+                            size_hint: .7, .15
                             text_size: self.size
                             halign: 'left'
                             color:(0,0,0,1)
@@ -176,7 +176,7 @@
                         Label:
                             # Number of People in Store
                             #pos_hint: {'center_y': .75,'center_x': 0.4}
-                            size_hint: .7, .2
+                            size_hint: .7, .15
                             text_size: self.size
                             halign: 'left'
                             color:(0,0,0,1)
@@ -185,9 +185,14 @@
                             id: avg_gen
 
                     Image:
+                        source:"male.femalebar.png"
+                        pos_hint: {'center_y': .5, 'center_x': 0.35}
+                        size_hint: .5, .3
+
+                    Image:
                         id:age_src
                         source:"adv_imgs/child1.10.jpg"
-                        pos_hint: {'center_y': .3, 'center_x': 0.35}
+                        pos_hint: {'center_y': .2, 'center_x': 0.35}
                         size_hint: .7, .5
 
 

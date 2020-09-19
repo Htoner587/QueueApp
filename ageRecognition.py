@@ -39,6 +39,11 @@ def mainAgeFunction(customerNumber):
         cursor.execute(updateC, recordUpdate)
         connection.commit()
 
+        try:
+            os.removedirs(img_folder)
+        except:
+            print("Unable to delete")
+
 
     cursor.close()
 

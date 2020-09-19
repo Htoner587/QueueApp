@@ -27,7 +27,7 @@ class MyTestCase_App(unittest.TestCase):
 
         self.app.setStore(1)
 
-        self.assertEqual(self.app.selectedStore.selectedStore, 1)
+        self.assertEqual(self.app.selectedStore.storeNumber, 1)
 
         self.assertEqual(self.app.selectedStore.entrance_videos[0],"videos/video-7a.mov")
 
@@ -39,7 +39,7 @@ class MyTestCase_App(unittest.TestCase):
 
         self.app.selectStore("Asda Westwood")
 
-        self.assertEqual(self.app.selectedStore.selectedStore, 1)
+        self.assertEqual(self.app.selectedStore.storeNumber, 1)
 
 """
 class MyTestCase_waitTimeCalculator(unittest.TestCase):

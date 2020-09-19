@@ -281,6 +281,12 @@ class queueAnalysis():
 
                                         queueAnalysis.cursor.execute(updateC, recordUpdate)
                                         queueAnalysis.connection.commit()
+
+
+                                        print("Deleting "+str(queueAnalysis.known_numbers[match])+ "AND "+str(queueAnalysis.known_faces[match]))
+                                        del queueAnalysis.known_faces[match]
+                                        del queueAnalysis.known_numbers[match]
+
                                     #if not True in results:
                                         #print("EXIT: I encoded this face but I'm not sure who it is? ")
                                 except IndexError:

@@ -9,101 +9,340 @@
                 size: self.size
                 pos: self.pos
 
+
+        #SIDE NAV BAR
         GridLayout:
-            cols:1
-            padding:100,70,70,100
+            cols:2
+            FloatLayout:
+                pos_hint: {"top": 1, "left": 1}
+                size_hint: .2, 1
+                canvas:
+                    Color:
+                        rgb:utils.get_color_from_hex("#85C1E9")
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
 
-            GridLayout:
-                pos_hint: {"top": .8, "left": .7}
-                size_hint: .8, .8
-                rows:13
+                Image:
+                    # Streak label
+                    pos_hint: {'center_y': 0.92, 'center_x': 0.5}
+                    width:0.8
+                    source:"./QueueBusterLogo.png"
 
-                Label:
-                    pos_hint: {"top": 0.8, "left": 0.5}
-                    size_hint: 1, .2
-                    text: "Queue Buster Camera Settings"
+                FloatLayout:
+                    pos_hint: {'center_y': 0.75, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
 
-                Label:
-                    text:"Entrance Cameras"
+                    Button:
+                        text:"Home"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
 
-                GridLayout:
-                    cols:2
+                        on_release:
+                            app.change_screen("home_screen", direction='right', mode='push')
+
+
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.6, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Settings"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+                        on_release:
+                            app.change_screen("settings_screen", direction='right', mode='push')
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.45, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Advertising"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+                        on_release:
+                            app.change_screen("advertising_screen", direction='right', mode='push')
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.3, 'center_x': 0.5}
+                    size_hint: .6, .12
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#85C1E9")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                    Button:
+                        text:"Manage Staff"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: 1, 1
+                        background_normal: './bottom.png'
+                        background_down: './bottom.png'
+                        border: 2, 2, 2, 2
+                        on_release:
+                            app.change_screen("add_staff_screen", direction='right', mode='push')
+
+                    # END OF NAV BAR
+
+
+            GridLayout
+                pos_hint: {"top": 1, "left": .8}
+                size_hint: .8, 1
+                rows:2
+
+                FloatLayout:
+                    pos_hint: {'center_y': 0.8, 'center_x': 0.6}
+                    size_hint: 1, .15
+                    canvas:
+                        Color:
+                            rgb:utils.get_color_from_hex("#08274b")
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+
                     Label:
-                        id:video_path
-                        text:"The current Entrance Video input is " + root.ids.video_path.source
-                        source:"None"
+                        # Title label
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.4}
+                        size_hint: .6, 1
+                        text_size: self.size
+                        halign: 'left'
+                        valign: 'middle'
+                        markup: 'true'
+                        text: "[b]Welcome to Queue Buster[/b]"
+
+
                     Button:
-                        background_color:(0.093,0.448,0.853,1)
-                        text:"X"
-
-                Button:
-                    text: "Select New Entrance Video File"
-                    background_color:(0.093,0.448,0.853,1)
-                    on_release:
-                        root.open_popup()
-
-                Label:
-                    text:"Exit Cameras"
-
-                GridLayout:
-                    cols:2
-                    Label:
-                        id:video_path_exit
-                        text:"The current Entrance Video input is " + root.ids.video_path_exit.source
-                        source:"None"
-                    Button:
-                        background_color:(0.093,0.448,0.853,1)
-                        text:"X"
-
-                Button:
-                    text: "Select New Exit Video File"
-                    background_color:(0.093,0.448,0.853,1)
-                    on_release:
-                        root.open_popup()
-
-
-                Label:
-                    id:confidence
-                    text:"Confidence % for Facial Detection is UNSET"
-
-                GridLayout:
-                    cols:2
-                    TextInput:
-                        id:confidence_val
-                    Button:
-                        text:"Update"
-                        background_color:(0.093,0.448,0.853,1)
+                        text:"Logout"
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.9}
+                        size_hint: .15, .9
+                        background_normal: './buttonlight.png'
+                        background_down: './buttonlight.png'
+                        border: 1, 1, 1, 1
                         on_release:
-                            root.update_conf(root.ids.confidence_val.text)
+                            app.signOut()
+
+                FloatLayout:
+                    pos_hint: {'center_y': .425, 'center_x': 0.6}
+                    size_hint: 1, .85
+
+                    GridLayout:
+                        cols:1
+                        pos_hint: {'center_y': .5, 'center_x': 0.5}
+                        padding:50,20,50,20
+
+                        GridLayout:
+                            pos_hint: {'center_y': .5, 'center_x': 0.5}
+                            size_hint: .8, .8
+                            rows:17
+
+                            Label:
+                                pos_hint: {'center_y': .9, 'center_x': 0.4}
+                                size_hint: 1, .2
+                                text: "Queue Buster Camera Settings"
+
+                            Label:
+
+                                text:"Entrance Cameras"
+
+                            GridLayout:
+                                cols:2
+                                padding:0,10,0,0
+                                Label:
+                                    id:video_path1
+                                    text:"Video input is " + root.ids.video_path1.source
+                                    source:"None"
+                                GridLayout:
+                                    cols:1
+                                    padding: 70,0,60,0
+                                    Button:
+                                        background_color:(0.093,0.448,0.853,1)
+                                        text:"DELETE"
+                                        on_release:root.removeVideo(root.ids.video_path1.source)
 
 
-                Label:
-                    id:q_length
-                    text:"The maximum queue length is "
+                            GridLayout:
+                                cols:2
+                                Label:
+                                    id:video_path2
+                                    text:"Video input is " + root.ids.video_path2.source
+                                    source:"EMPTY"
+                                GridLayout:
+                                    cols:1
+                                    padding: 70,0,60,0
+                                    Button:
+                                        background_color:(0.093,0.448,0.853,1)
+                                        text:"DELETE"
+                                        on_release:root.removeVideo(root.ids.video_path2.source)
 
-                GridLayout:
-                    cols:2
-                    TextInput:
-                        id:tol_length
-                    Button:
-                        text:"Update"
-                        background_color:(0.093,0.448,0.853,1)
-                        on_release:
-                            root.update_length(root.ids.tol_length.text)
+
+                            GridLayout:
+                                cols:2
+                                Label:
+                                    id:video_path3
+                                    text:"Video input is " + root.ids.video_path3.source
+                                    source:"EMPTY"
+                                GridLayout:
+                                    cols:1
+                                    padding: 70,0,60,0
+                                    Button:
+                                        background_color:(0.093,0.448,0.853,1)
+                                        text:"DELETE"
+                                        on_release:root.removeVideo(root.ids.video_path3.source)
+
+                            GridLayout:
+                                cols:1
+                                padding: 120,0,120,0
+                                Button:
+                                    text: "Select New Entrance Video File"
+                                    background_color:(0.093,0.448,0.853,1)
+                                    on_release:
+                                        root.open_popup()
+
+                            Label:
+                                text:"Exit Cameras"
+
+                            GridLayout:
+                                cols:2
+                                padding:0,10,0,0
+                                Label:
+                                    id:video_path_exit1
+                                    text:"Video input is " + root.ids.video_path_exit1.source
+                                    source:"EMPTY"
+                                GridLayout:
+                                    cols:1
+                                    padding: 70,0,60,0
+                                    Button:
+                                        background_color:(0.093,0.448,0.853,1)
+                                        text:"DELETE"
+                                        on_release:root.removeVideo(root.ids.video_path_exit1.source)
 
 
-                Label:
-                    id:wait_time
-                    text:"The maximum wait time is "
-                GridLayout:
-                    cols:2
-                    TextInput:
-                        id:tol_wait
-                    Button:
-                        text:"Update"
-                        background_color:(0.093,0.448,0.853,1)
-                        on_release:
-                            root.update_wait(root.ids.tol_wait.text)
+                            GridLayout:
+                                cols:2
+                                Label:
+                                    id:video_path_exit2
+                                    text:"Video input is " + root.ids.video_path_exit2.source
+                                    source:"EMPTY"
+                                GridLayout:
+                                    cols:1
+                                    padding: 70,0,60,0
+                                    Button:
+                                        background_color:(0.093,0.448,0.853,1)
+                                        text:"DELETE"
+                                        on_release:root.removeVideo(root.ids.video_path_exit2.source)
+
+                            GridLayout:
+                                cols:2
+                                Label:
+                                    id:video_path_exit3
+                                    text:"Video input is " + root.ids.video_path_exit3.source
+                                    source:"EMPTY"
+                                GridLayout:
+                                    cols:1
+                                    padding: 70,0,60,0
+                                    Button:
+                                        background_color:(0.093,0.448,0.853,1)
+                                        text:"DELETE"
+                                        on_release:root.removeVideo(root.ids.video_path_exit3.source)
+
+                            GridLayout:
+                                cols:1
+                                padding:120,0,120,0
+                                Button:
+                                    text: "Select New Exit Video File"
+                                    background_color:(0.093,0.448,0.853,1)
+                                    on_release:
+                                        root.open_popup()
+
+
+                            Label:
+                                id:confidence
+                                text:"Confidence % for Facial Detection is UNSET"
+
+                            GridLayout:
+                                cols:2
+                                padding: 100,0,100,0
+                                TextInput:
+                                    id:confidence_val
+                                GridLayout:
+                                    cols:1
+                                    padding: 20,0,30,0
+                                    Button:
+                                        text:"Update"
+                                        background_color:(0.093,0.448,0.853,1)
+                                        on_release:
+                                            root.update_conf(root.ids.confidence_val.text)
+
+
+                            Label:
+                                id:q_length
+                                text:"The maximum number of people in store is 3"
+
+                            GridLayout:
+                                cols:2
+                                padding: 100,0,100,0
+                                TextInput:
+                                    id:tol_length
+                                GridLayout:
+                                    cols:1
+                                    padding: 20,0,30,0
+                                    Button:
+                                        text:"Update"
+                                        background_color:(0.093,0.448,0.853,1)
+                                        on_release:
+                                            root.update_length(root.ids.tol_length.text)
+
+
+                            Label:
+                                id:wait_time
+                                text:"The maximum wait time is 30 Mins"
+                            GridLayout:
+                                cols:2
+                                padding: 100,0,100,0
+                                TextInput:
+                                    id:tol_wait
+                                GridLayout:
+                                    cols:1
+                                    padding: 20,0,30,0
+                                    Button:
+                                        text:"Update"
+                                        background_color:(0.093,0.448,0.853,1)
+                                        on_release:
+                                            root.update_wait(root.ids.tol_wait.text)
+
+
+
 
 
 

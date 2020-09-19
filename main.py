@@ -202,6 +202,40 @@ class AddStaffScreen(Screen):
 class SettingsScreen(Screen):
     fileSelector = None
 
+    video_src_entrance=[]
+
+    video_src_exit=[]
+
+    def get_videos(self):
+        self.video_src_entrance=app.selectedStore.entrance_videos
+        self.root.ids.settings_screen.ids.video_path1.source = str(self.video_src_entrance[0])
+        if len(self.video_src_entrance)>1:
+            self.root.ids.settings_screen.ids.video_path2.source = str(self.video_src_entrance[1])
+            if len(self.video_src_entrance)>2:
+                self.root.ids.settings_screen.ids.video_path3.source = str(self.video_src_entrance[2])
+
+        self.video_src_exit=app.selectedStore.exit_videos
+        self.root.ids.settings_screen.ids.video_path_exit1.source=str(self.video_src_exit[0])
+        if len(self.video_src_exit)>1:
+            self.root.ids.settings_screen.ids.video_path_exit2.source = str(self.video_src_exit[1])
+            if len(self.video_src_exit)>2:
+                self.root.ids.settings_screen.ids.video_path_exit3.source = str(self.video_src_exit[2])
+
+    def removeVideo(self, videoPath):
+        connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
+                                     database="queue_buster", port=3306)
+        cursor = connection.cursor()
+
+        delete="DELETE  FROM `q_videos` WHERE q_videos.source=%s AND StoreID=%s"
+
+        data=(videoPath,app.selectedStore.storeNumber)
+
+        cursor.execute(delete,data)
+
+        connection.commit()
+
+        cursor.close()
+
     def open_popup(self):
         fileSelector = MySettingsPopup()
         fileSelector.title = "Please select a video"
@@ -222,6 +256,7 @@ class SettingsScreen(Screen):
 
 
 class AdvertisingScreen(Screen):
+
     avg_gender = None
 
     avg_age = 0
@@ -231,24 +266,21 @@ class AdvertisingScreen(Screen):
 
     advert_image = age_src[2]
 
-    database=pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
-                                         database="queue_buster", port=3306)
+    store = None
 
-    #store = app.selectedStore.selectedStore
-
-    store=0
     def calculate_age(self, *args):
 
-        if self.store != None:
+        if store!= None:
             print("Calculating the ages from database")
 
-            cursor = self.database.cursor()
+            database = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
+                                       database="queue_buster", port=3306)
+
+            cursor = database.cursor()
 
             retrive = "Select MedianValue, GenderID FROM (q_Customers JOIN q_age ON q_customers.AgeID=q_age.AgeID) WHERE StoreID=%s LIMIT 20;"
 
-
-
-            cursor.execute(retrive, self.store)
+            cursor.execute(retrive, store)
 
             rows = cursor.fetchall()
 
@@ -262,30 +294,30 @@ class AdvertisingScreen(Screen):
             print(totalAge)
 
             if len(rows) > 0:
-                self.avg_age = totalAge / len(rows)
+                avg_age = totalAge / len(rows)
 
-                self.avg_gender = totalGender / len(rows)
+                avg_gender = totalGender / len(rows)
 
-                #app.root.ids.advertising_screen.ids.avg_age.text = "The average age in the queue is " + str(
-                    #round(avg_age, 2))
-                #app.root.ids.advertising_screen.ids.avg_gen.text = "The average gender in the queue is " + str(
-                    #round(avg_gender, 2))
+                app.root.ids.advertising_screen.ids.avg_age.text = "The average age in the queue is " + str(
+                    round(avg_age, int))
+                app.root.ids.advertising_screen.ids.avg_gen.text = "The average gender in the queue is " + str(
+                    round(avg_gender, 2))
 
-                if self.avg_age < 10:
+                if avg_age < 10:
                     self.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[0])
 
-                if self.avg_age >= 10:
-                    if self.avg_age < 18:
+                if avg_age >= 10:
+                    if avg_age < 18:
                         if self.avg_gender < 0.5:
                             self.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[1])
                         else:
                             self.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[2])
 
-                #if avg_age >= 18:
-                    #if avg_age <= 50:
-                        #app.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[3])
-                    #else:
-                        #app.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[4])
+                if avg_age >= 18:
+                    if avg_age <= 50:
+                        app.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[3])
+                    else:
+                        app.root.ids.advertising_screen.ids.age_src.source = str(AdvertisingScreen.age_src[4])
 
     pass
 
@@ -293,36 +325,18 @@ class AdvertisingScreen(Screen):
 class WaitAlertPopup(Popup):
     pass
 
-
 class LengthAlertPopup(Popup):
     pass
-
 
 class MyVideoPopup(Popup):
     # Popup to view video footage
     pass
 
-
-class VideoPlayer():
-
-    def build(self):
-        video = Video()
-        video.state = 'play'
-        video.options = {'eos': 'loop'}
-
-        video.allow_stretch = True
-
-        return video
-
-
 class MySettingsPopup(Popup):
 
     def selected(self, filename):
         try:
-            print(filename[0])
-            print(app.root.ids.settings_screen.ids.video_path.text)
             app.root.ids.settings_screen.ids.video_path.source = filename[0]
-            print(app.root.ids.settings_screen.ids.video_path.text)
             SettingsScreen.fileSelector.dismiss()
 
 
@@ -338,16 +352,13 @@ class FileChooserWindow(App):
 """
 STORE
 """
-
-
 class Store():
-    selectedStore=None
+    storeNumber=None
     tol_length = 3
     tol_wait = datetime.timedelta(minutes=30)
     entrance_videos = []
     exit_videos = []
     queue_video = None
-
 
 class User():
     userNumber=0
@@ -362,11 +373,10 @@ class UserType(enum.Enum):
 """
 APP - MAIN FUNCTIONALITY
 """
-
 GUI = Builder.load_file("main.kv")
 
-
 class QueueBusterApp(App):
+    stop_thread=False
     my_queue_analysis = queueAnalysis()
     my_wait_time_calculator = waitTimeCalculator()
     selectedStore = Store()
@@ -379,13 +389,13 @@ class QueueBusterApp(App):
 
     @mainthread
     def on_start(self):
-        Clock.schedule_interval(self.num_in_queue, 60)
-        Clock.schedule_interval(AdvertisingScreen.calculate_age, 60)
+        #Clock.schedule_interval(self.num_in_queue, 60)
+        #Clock.schedule_interval(AdvertisingScreen.calculate_age, 60)
         Clock.schedule_interval(self.update_ages, 150)
-        Clock.schedule_interval(self.calculate_wait_time, 60)
+        #Clock.schedule_interval(self.calculate_wait_time, 60)
 
     def start_second_thread(self, video_entrance, video_exit, video_queue):
-        self.my_queue_analysis.store = app.selectedStore.selectedStore
+        self.my_queue_analysis.store = app.selectedStore.storeNumber
         self.root.ids.settings_screen.ids.confidence.text = "Confidence % for Facial Detection is " + str(
             self.my_queue_analysis.confidence_val)
         t2 = threading.Thread(target=self.my_queue_analysis.threadedProcessing,
@@ -398,9 +408,11 @@ class QueueBusterApp(App):
 
     def setStore(self, store):
 
-        #self.selectedStore = Store()
+        self.selectedStore.storeNumber=store
 
-        self.selectedStore.selectedStore=store
+        AdvertisingScreen.store = store
+
+        print(AdvertisingScreen.store)
 
         connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
                                      database="queue_buster", port=3306)
@@ -445,7 +457,7 @@ class QueueBusterApp(App):
 
     def update_ages(self, *args):
 
-        if app.selectedStore.selectedStore != None:
+        if app.selectedStore.storeNumber != None:
             print("Adding ages to database")
 
             connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
@@ -455,7 +467,7 @@ class QueueBusterApp(App):
 
             retrive = "Select CustomerID FROM q_Customers WHERE AgeID IS NULL AND StoreID=%s;"
 
-            store = (app.selectedStore.selectedStore)
+            store = (app.selectedStore.storeNumber)
 
             cursor.execute(retrive, store)
 
@@ -468,8 +480,8 @@ class QueueBusterApp(App):
 
     def calculate_wait_time(self, *args):
         if app.selectedStore != None:
-            waitTimeCalculator.store = app.selectedStore.selectedStore
-            waitTimeCalculator.numInStore = app.selectedStore.tol_length
+            waitTimeCalculator.store = app.selectedStore.storeNumber
+            waitTimeCalculator.maxInStore = app.selectedStore.tol_length
 
             waitTime = app.my_wait_time_calculator.calculate_wait_time()
             outputString = "The average wait time is " + str(waitTime)
@@ -480,7 +492,7 @@ class QueueBusterApp(App):
                 app.tol_wait_popup.open()
                 app.tol_wait_popup.title = "WARNING"
 
-    def num_in_queue(self, *args):
+    def numInStore(self, *args):
         ## Number of people in the store!!!
         if app.selectedStore != None:
             connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
@@ -489,7 +501,7 @@ class QueueBusterApp(App):
             cursor = connection.cursor()
             retrive = "Select WaitTime FROM q_Customers WHERE WaitTime IS NULL AND StoreID=%s ORDER BY CustomerID DESC;"
 
-            store = (app.selectedStore.selectedStore)
+            store = (app.selectedStore.storeNumber)
 
             print("Calculating queue length ... ")
             # executing the quires
@@ -504,6 +516,11 @@ class QueueBusterApp(App):
                 app.tol_length_popup.open()
                 app.tol_length_popup.title = "WARNING"
             cursor.close()
+
+    def signOut(self):
+        app.user=User()
+        app.selectedStore=Store()
+        app.change_screen("login_screen", direction='right', mode='push')
 
     def change_screen(self, screen_name, direction='forward', mode=""):
         # Get the screen manager from the kv file
@@ -541,6 +558,8 @@ class QueueBusterApp(App):
 
             cursor.close()
 
+
+
         if screen_name == "add_staff_screen":
             connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
                                          database="queue_buster", port=3306)
@@ -566,7 +585,11 @@ class QueueBusterApp(App):
 
         screen_manager.current = screen_name
 
+        if screen_name == "advertising_screen":
+            AdvertisingScreen.store=app.selectedStore.storeNumber
 
+        if screen_name == "settings_screen":
+            SettingsScreen.get_videos(self)
 """
 MAIN
 """
