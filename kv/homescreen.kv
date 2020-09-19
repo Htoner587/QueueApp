@@ -199,35 +199,29 @@
 
                     Button:
                         text:"Play Entrance Video"
-                        pos_hint: {'center_y': .4, 'center_x': 0.25}
-                        size_hint: .3, .2
+                        pos_hint: {'center_y': .4, 'center_x': 0.2}
+                        size_hint: .28, .2
                         background_color:(0.093,0.448,0.853,1)
                         on_release:
                             root.open_popup_entrance()
 
                     Button:
                         text:"Play Exit Video"
-                        pos_hint: {'center_y': .4, 'center_x': 0.65}
-                        size_hint: .3, .2
+                        pos_hint: {'center_y': .4, 'center_x': 0.5}
+                        size_hint: .28, .2
                         background_color:(0.093,0.448,0.853,1)
                         on_release:
                             root.open_popup_exit()
 
                     Button:
                         text:"Start Video Analysis"
-                        pos_hint: {'center_y': .15, 'center_x': 0.25}
-                        size_hint: .3, .2
+                        pos_hint: {'center_y': .4, 'center_x': 0.8}
+                        size_hint: .28, .2
                         background_color:(0.093,0.448,0.853,1)
                         on_release:
                             app.start_second_thread(app.selectedStore.entrance_videos, app.selectedStore.exit_videos, app.selectedStore.queue_video)
 
-                    Button:
-                        text:"Stop Video Analysis"
-                        pos_hint: {'center_y': .15, 'center_x': 0.65}
-                        size_hint: .3, .2
-                        background_color:(0.093,0.448,0.853,1)
-                        on_release:
-                            root.open_popup_exit()
+
 
 
 

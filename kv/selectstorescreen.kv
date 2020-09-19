@@ -47,7 +47,7 @@
                     background_down: './buttonlight.png'
                     border: 1, 1, 1, 1
                     on_release:
-                        app.change_screen("add_staff_screen", direction='right', mode='push')
+                        app.signOut()
 
             FloatLayout:
                 pos_hint: {'center_y': .425, 'center_x': 0.5}
@@ -61,17 +61,22 @@
                     background_color:(0.093,0.448,0.853,1)
                     text: "Please select which store you would like to manage."
 
-
-                Spinner:
-                    id: dropdown
-                    background_color:(0.093,0.448,0.853,1)
-                    text:"Select Store"
-                    values: ('No Stores',)
+                GridLayout:
+                    cols:1
+                    padding:100,20,100,20
                     pos_hint: {'center_y': 0.5, 'center_x': 0.5}
                     size_hint: .6, 0.3
-                    on_text:
-                        app.selectStore(dropdown.text)
-                        app.change_screen("home_screen", direction='right', mode='push')
+
+                    Spinner:
+                        id: dropdown
+                        background_color:(0.093,0.448,0.853,1)
+                        text:"Select Store"
+                        values: ('No Stores',)
+                        pos_hint: {'center_y': 0.5, 'center_x': 0.5}
+                        size_hint: .6, 0.3
+                        on_text:
+                            app.selectStore(dropdown.text)
+                            app.change_screen("home_screen", direction='right', mode='push')
 
 
 
