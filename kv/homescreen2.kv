@@ -1,5 +1,5 @@
 #:import utils kivy.clock
-<HomeScreen2>:
+<HomeScreenViewer>:
 
     FloatLayout:
         canvas:
@@ -157,4 +157,4 @@
                         background_color:(0.093,0.448,0.853,1)
                         on_release:
                             app.start_second_thread(app.selectedStore.entrance_videos, app.selectedStore.exit_videos, app.selectedStore.queue_video)
-
+                            self.background_color=(0,0,0,1)

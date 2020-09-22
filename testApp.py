@@ -41,7 +41,7 @@ class MyTestCase_App(unittest.TestCase):
 
         self.assertEqual(self.app.selectedStore.storeNumber, 1)
 
-"""
+
 class MyTestCase_waitTimeCalculator(unittest.TestCase):
 
     calc=waitTimeCalculator.waitTimeCalculator()
@@ -49,7 +49,32 @@ class MyTestCase_waitTimeCalculator(unittest.TestCase):
     calc.database=pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
                                          database="test_queue", port=3306)
 
-    calc.numInStore=3
+    calc.maxInStore=3
+
+    mydatabase = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
+                                    database="test_queue", port=3306)
+
+    mycursor=mydatabase.cursor()
+
+    def setUp(self):
+
+        insert="INSERT INTO `q_customers` (`CustomerID`, `StoreID`, `Date`, `EntranceTime`, `ExitTime`, `WaitTime`, `AgeID`, `GenderID`) VALUES (NULL, '1', %s, '16:00:00.000000', NULL, NULL, NULL, '0'), (NULL, '2', %s, '16:00:00.000000', NULL, NULL, NULL, '1'), (NULL, '2', %s, '16:18:00.000000', NULL, NULL, NULL, '0'), (NULL, '2', %s, '16:22:00.000000', NULL, NULL, NULL, '0'),(NULL, '3', %s, '16:00:00.000000', '16:05:00.000000', NULL, NULL, '1'),(NULL, '3', %s, '16:02:00.000000', '16:07:00.000000', NULL, NULL, '1'),(NULL, '3', %s, '15:59:00.000000', '16:03:00.000000', NULL, NULL, '0'),(NULL, '3', %s, '16:05:00.000000', NULL, NULL, NULL, '1'),(NULL, '3', %s, '16:06:00.000000', NULL, NULL, NULL, '1'),(NULL, '3', %s, '16:08:00.000000', NULL, NULL, NULL, '0');"
+
+        date=datetime.date.today()
+
+        data=(date,date,date,date,date,date,date,date,date,date,)
+
+        self.mycursor.execute(insert,data)
+
+        #self.mydatabase.commit()
+
+        insert2= "INSERT INTO `q_length` (`LengthID`, `StoreID`, `Date`, `Time`, `QueueLength`, `Arrival`) VALUES ('NULL', '3', %s, '16:00:00', '0', '0x01'),('NULL', '3', %s, '16:02:00', '0', '0x01'),(NULL, 3, %s, '16:05:00', 0, 0x01),(NULL, 3, %s, '16:06:00', 0, 0x01),(NULL, 3, %s, '16:08:00', 1, 0x01),(NULL, 3, %s, '16:08:30', 1, 0x01);"
+
+        data2=(date,date,date,date,date,date)
+
+        self.mycursor.execute(insert2, data2)
+
+        self.mydatabase.commit()
 
     def test_wait_time_1(self):
 
@@ -86,8 +111,25 @@ class MyTestCase_waitTimeCalculator(unittest.TestCase):
 
         self.assertEqual(predicted,actual)
 
+    def tidyUp(self):
 
-"""
+        date=datetime.date.today()
+
+        delete="DELETE FROM `q_customers` WHERE Date=%s"
+
+        self.mycursor.execute(delete,date)
+
+        self.mydatabase.commit()
+
+        delete2="DELETE FROM `q_length` WHERE Date=%s"
+
+        self.mycursor.execute(delete2, date)
+
+        self.mydatabase.commit()
+
+        self.mycursor.close()
+
+
 
 class MyTestCase_AdvertisingScreen(unittest.TestCase):
 
@@ -109,7 +151,7 @@ class MyTestCase_AdvertisingScreen(unittest.TestCase):
         self.assertEqual(self.advertScreen.avg_gender, 2/3)
 
 
-
+"""
 class MyTestCase_queueAnalysisSQL(unittest.TestCase):
 
     qa=queueAnalysisSQL.queueAnalysis()
@@ -155,7 +197,7 @@ class MyTestCase_queueAnalysisSQL(unittest.TestCase):
         self.assertGreater(endCustomers, startCustomers)
 
         testcursor.close()
-
+"""
 
 if __name__ == '__main__':
     unittest.main()

@@ -44,6 +44,8 @@ class LoginScreen(Screen):
 
         rows = cursor.fetchall()
 
+
+
         if len(rows) == 1:
             app.setUser(rows[0][0], rows[0][1])
             if rows[0][0] == 0:
@@ -55,6 +57,7 @@ class LoginScreen(Screen):
             if rows[0][0] == 2:
                 app.setStore(rows[0][2])
                 app.change_screen("home_screen2", direction='right', mode='push')
+
 
 
         else:
@@ -100,7 +103,7 @@ class HomeScreenViewer(HomeScreen):
     pass
 
 
-class AdminHome(HomeScreen):
+class AdminHome(Screen):
 
     def getChains(self):
         chains = []
@@ -136,26 +139,34 @@ class AddStoreScreen(Screen):
 
         chainNum = chainvect[0]
 
-        connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
-                                     database="queue_buster", port=3306)
-        cursor = connection.cursor()
+        storeName=app.root.ids.add_store_screen.ids.store_name.text
+        houseNum=app.root.ids.add_store_screen.ids.house_number.text
+        streetName=app.root.ids.add_store_screen.ids.street_name.text
 
-        retrive = "INSERT INTO `q_Stores` ( `StoreID`,`StoreName`, `HouseNumber`, `StreetName`, `City`, `Postcode`, `Country`, `ChainID`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)"
+        if len(storeName.strip())==0 or len(houseNum.strip())==0 or len(streetName.strip())==0:
+            app.root.ids.add_store_screen.ids.error_msg.text="Some information is missing please try again!"
 
-        data = (app.root.ids.add_store_screen.ids.store_name.text, app.root.ids.add_store_screen.ids.house_number.text,
-                app.root.ids.add_store_screen.ids.street_name.text, app.root.ids.add_store_screen.ids.city.text,
-                app.root.ids.add_store_screen.ids.postcode.text, app.root.ids.add_store_screen.ids.country.text,
-                chainNum)
+        else:
+            connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
+                                         database="queue_buster", port=3306)
+            cursor = connection.cursor()
 
-        print("ADDING STORE")
+            retrive = "INSERT INTO `q_Stores` ( `StoreID`,`StoreName`, `HouseNumber`, `StreetName`, `City`, `Postcode`, `Country`, `ChainID`) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)"
 
-        cursor.execute(retrive, data)
+            data = (app.root.ids.add_store_screen.ids.store_name.text, app.root.ids.add_store_screen.ids.house_number.text,
+                    app.root.ids.add_store_screen.ids.street_name.text, app.root.ids.add_store_screen.ids.city.text,
+                    app.root.ids.add_store_screen.ids.postcode.text, app.root.ids.add_store_screen.ids.country.text,
+                    chainNum)
 
-        connection.commit()
+            print("ADDING STORE")
 
-        app.change_screen("admin_home", direction='right', mode='push')
+            cursor.execute(retrive, data)
 
-        cursor.close()
+            connection.commit()
+
+            app.change_screen("admin_home", direction='right', mode='push')
+
+            cursor.close()
 
     pass
 
@@ -175,26 +186,36 @@ class AddStaffScreen(Screen):
         if roleName == "Viewer":
             RoleID = 2
 
-        connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
-                                     database="queue_buster", port=3306)
-        cursor = connection.cursor()
+        firstName=app.root.ids.add_staff_screen.ids.first_name.text
+        lastName=app.root.ids.add_staff_screen.ids.last_name.text
+        userName=app.root.ids.add_staff_screen.ids.user_name.text
+        passWord=app.root.ids.add_staff_screen.ids.password.text
 
-        retrive = "INSERT INTO `q_Staff` ( `StaffID`, `StoreID`,`FirstName`, `LastName`, `RoleID`, `UserName`, `Password`) VALUES (NULL, %s, %s, %s, %s, %s,%s)"
+        if RoleID==None or len(firstName.strip())==0 or len(lastName.strip())==0 or len(userName.strip())==0 or len(passWord.strip())==0:
+            app.root.ids.add_staff_screen.ids.error_msg.text="Some information is missing, please try again"
 
-        data = (app.selectedStore, app.root.ids.add_staff_screen.ids.first_name.text,
-                app.root.ids.add_staff_screen.ids.last_name.text,
-                str(RoleID), app.root.ids.add_staff_screen.ids.user_name.text,
-                app.root.ids.add_staff_screen.ids.password.text)
+        else:
 
-        print("ADDING STAFF")
+            connection = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
+                                         database="queue_buster", port=3306)
+            cursor = connection.cursor()
 
-        cursor.execute(retrive, data)
+            retrive = "INSERT INTO `q_Staff` ( `StaffID`, `StoreID`,`FirstName`, `LastName`, `RoleID`, `UserName`, `Password`) VALUES (NULL, %s, %s, %s, %s, %s,%s)"
 
-        connection.commit()
+            data = (app.selectedStore.storeNumber, app.root.ids.add_staff_screen.ids.first_name.text,
+                    app.root.ids.add_staff_screen.ids.last_name.text,
+                    str(RoleID), app.root.ids.add_staff_screen.ids.user_name.text,
+                    app.root.ids.add_staff_screen.ids.password.text)
 
-        app.change_screen("home_screen", direction='right', mode='push')
+            print("ADDING STAFF")
 
-        cursor.close()
+            cursor.execute(retrive, data)
+
+            connection.commit()
+
+            app.change_screen("home_screen", direction='right', mode='push')
+
+            cursor.close()
 
     pass
 
@@ -266,11 +287,9 @@ class AdvertisingScreen(Screen):
 
     advert_image = age_src[2]
 
-    store = None
-
     def calculate_age(self, *args):
 
-        if store!= None:
+        if app.selectedStore.storeNumber!= None:
             print("Calculating the ages from database")
 
             database = pymysql.connect(host="localhost", user="admin", passwd="TueyW8ObgPTK0Qmb",
@@ -280,7 +299,7 @@ class AdvertisingScreen(Screen):
 
             retrive = "Select MedianValue, GenderID FROM (q_Customers JOIN q_age ON q_customers.AgeID=q_age.AgeID) WHERE StoreID=%s LIMIT 20;"
 
-            cursor.execute(retrive, store)
+            cursor.execute(retrive, app.selectedStore.storeNumber)
 
             rows = cursor.fetchall()
 
@@ -299,7 +318,7 @@ class AdvertisingScreen(Screen):
                 avg_gender = totalGender / len(rows)
 
                 app.root.ids.advertising_screen.ids.avg_age.text = "The average age in the queue is " + str(
-                    round(avg_age, int))
+                    round(avg_age, 0))
                 app.root.ids.advertising_screen.ids.avg_gen.text = "The average gender in the queue is " + str(
                     round(avg_gender, 2))
 
@@ -389,8 +408,8 @@ class QueueBusterApp(App):
 
     @mainthread
     def on_start(self):
-        #Clock.schedule_interval(self.num_in_queue, 60)
-        #Clock.schedule_interval(AdvertisingScreen.calculate_age, 60)
+        Clock.schedule_interval(self.numInStore, 60)
+        Clock.schedule_interval(AdvertisingScreen.calculate_age, 30)
         Clock.schedule_interval(self.update_ages, 150)
         #Clock.schedule_interval(self.calculate_wait_time, 60)
 
@@ -499,7 +518,7 @@ class QueueBusterApp(App):
                                          database="queue_buster", port=3306)
 
             cursor = connection.cursor()
-            retrive = "Select WaitTime FROM q_Customers WHERE WaitTime IS NULL AND StoreID=%s ORDER BY CustomerID DESC;"
+            retrive = "Select InStore FROM q_Customers WHERE InStore IS NULL AND StoreID=%s ORDER BY CustomerID DESC;"
 
             store = (app.selectedStore.storeNumber)
 
